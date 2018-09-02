@@ -10,13 +10,13 @@ loadBoard = () => {
 };
 
 //Keyboard listeners
-document.addEventListener("keydown", function (pressedKey) {
+document.addEventListener("keydown", (pressedKey) => {
     keys[pressedKey.keyCode] = true;
     if (DEFAULT_KEY.indexOf(pressedKey.keyCode) != -1) {
         pressedKey.preventDefault();
     }
 });
 
-document.addEventListener("keyup", function (releasedKey) {
+document.addEventListener("keyup", (releasedKey) => {
     keys[releasedKey.keyCode] = false;
 });

@@ -7,14 +7,21 @@ class Game {
 
         this.background = new Background(this);
         this.spaceship = new Spaceship(this);
+        this.enemies = [];
     }
 
     startGame() {
+        this.spanEnemy = 0;
         this.interval = setInterval(
             () => {
                 this.draw();
                 this.move();
                 this.spaceship.setAction(playerInput(PLAYER_CONTROLS));
+                this.spanEnemy++;
+                if(this.spanEnemy > 200 && this.enemies.length < 1){
+                    this.createEnemy();
+                    this.spanEnemy = 0;
+                }
             },
             TIME_DELTA
         );
@@ -23,10 +30,25 @@ class Game {
     draw() {
         this.background.draw();
         this.spaceship.draw();
+        if(this.enemies.length != 0){
+            for(let i=0 ; i<this.enemies.length ; i++){
+                this.enemies[i].draw();
+            }
+        }
     }
 
     move() {
         this.background.move();
         this.spaceship.move();
+        if(this.enemies.length != 0){
+            for(let i=0 ; i<this.enemies.length ; i++){
+                this.enemies[i].move();
+            }
+        }
+    }
+
+    createEnemy(){
+        let enemy = new Enemy(this);
+        this.enemies.push(enemy);
     }
 }

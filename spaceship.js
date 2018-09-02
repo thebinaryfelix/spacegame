@@ -10,7 +10,7 @@ class Spaceship {
         this.image = new Image();
         this.image.src = "images/spaceship.png";
 
-        this.speed = 100;
+        this.speed = V_UNITS;
         this.phasers = [];
     }
 
@@ -102,7 +102,6 @@ class Spaceship {
     }
 
     shoot() {
-        console.log("shoooooooting!!!");
         let phaser = new Phaser(this.game);
 
         phaser.x = this.x;
