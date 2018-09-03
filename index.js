@@ -6,7 +6,7 @@ $(function () {
 
 loadBoard = () => {
     const demoGame = new Game("main-board");
-    demoGame.startGame();
+    demoGame.play();
 };
 
 //Keyboard listeners

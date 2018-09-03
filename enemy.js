@@ -10,7 +10,7 @@ class Enemy {
         this.y = Math.floor(Math.random()*(this.game.board.height-this.h));
 
         this.vx = 10;
-        this.vy = 10;
+        this.vy = 0;
 
         this.image = new Image();
         this.image.src = "images/enemy.png";

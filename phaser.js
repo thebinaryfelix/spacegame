@@ -9,14 +9,14 @@ class Phaser {
         this.vx = 10;
 
         this.w = 100;
-        this.h = 100;
+        this.h = (198*this.w) / 1494;
 
         this.image = new Image();
         this.image.src = "images/phaser.png";
     }
 
     draw() {
-        this.game.ctx.drawImage(this.image, this.x + SPACESHIP_W*0.55, this.y - 16, this.w, this.h);
+        this.game.ctx.drawImage(this.image, this.x, this.y, this.w, this.h);
     }
 
     move() {

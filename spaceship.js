@@ -91,7 +91,7 @@ class Spaceship {
             this.x += this.directionX * this.speed / TIME_DELTA;
             this.y += this.directionY * this.speed / TIME_DELTA;
         }
-        
+
         this.phasers = this.phasers.filter((phaser) => {
             return phaser.x < this.game.board.width;
         })
@@ -104,9 +104,26 @@ class Spaceship {
     shoot() {
         let phaser = new Phaser(this.game);
 
-        phaser.x = this.x;
-        phaser.y = this.y;
+        phaser.x = this.x + SPACESHIP_W * 0.55;
+        phaser.y = this.y + 30;
 
         this.phasers.push(phaser);
+    }
+
+    checkPhaserImpact() {
+        if (this.game.enemies != 0 && this.phasers.length != 0) {
+            for (let i = 0; i < this.phasers.length; i++) {
+                for (let j = 0; j < this.game.enemies.length; j++) {
+                    if (this.phasers[i].x + this.phasers[i].w >= this.game.enemies[j].x &&
+                        this.phasers[i].x + this.phasers[i].w <= this.game.enemies[j].x + this.game.enemies[j].w &&
+                        (this.phasers[i].y >= this.game.enemies[j].y ||
+                            this.phasers[i].y + this.phasers[i].h >= this.game.enemies[j].y) &&
+                        this.phasers[i].y <= this.game.enemies[j].y + this.game.enemies[j].h
+                    ) {
+
+                    }
+                }
+            }
+        }
     }
 }
