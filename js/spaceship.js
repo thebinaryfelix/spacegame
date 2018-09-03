@@ -122,6 +122,7 @@ class Spaceship {
                             this.phasers[i].y + this.phasers[i].h >= this.game.enemies[j].y) &&
                         this.phasers[i].y <= this.game.enemies[j].y + this.game.enemies[j].h
                     ) {
+                        this.game.enemies[j].life = this.game.enemies[j].life - this.phasers[i].damage;
                         this.phasers.splice(i, 1);
                     }
                 }

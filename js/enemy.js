@@ -2,6 +2,8 @@ class Enemy {
     constructor(game) {
 
         this.game = game;
+
+        this.life = 300;
         
         this.w = 120;
         this.h = (515*this.w)/974;

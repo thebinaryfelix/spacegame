@@ -19,10 +19,11 @@ class Game {
                 this.spaceship.setAction(playerInput(PLAYER_CONTROLS));
 
                 this.spanEnemy++;
-                if(this.spanEnemy > 200 && this.enemies.length < ENEMY_QTY){
+                if (this.spanEnemy > 200 && this.enemies.length < ENEMY_QTY) {
                     this.createEnemy();
                     this.spanEnemy = 0;
                 }
+                this.checkEnemyLife();
             },
             TIME_DELTA
         );
@@ -32,8 +33,8 @@ class Game {
         this.background.draw();
         this.spaceship.draw();
 
-        if(this.enemies.length != 0){
-            for(let i=0 ; i<this.enemies.length ; i++){
+        if (this.enemies.length != 0) {
+            for (let i = 0; i < this.enemies.length; i++) {
                 this.enemies[i].draw();
             }
         }
@@ -43,15 +44,23 @@ class Game {
         this.background.move();
         this.spaceship.move();
 
-        if(this.enemies.length != 0){
-            for(let i=0 ; i<this.enemies.length ; i++){
+        if (this.enemies.length != 0) {
+            for (let i = 0; i < this.enemies.length; i++) {
                 this.enemies[i].move();
             }
         }
     }
 
-    createEnemy(){
+    createEnemy() {
         let enemy = new Enemy(this);
         this.enemies.push(enemy);
+    }
+
+    checkEnemyLife() {
+        for (let i = 0; i < this.enemies.length; i++) {
+            if (this.enemies[i].life <= 0) {
+                this.enemies.splice(i, 1);
+            }
+        }
     }
 }

@@ -11,6 +11,8 @@ class Phaser {
         this.w = 100;
         this.h = (198*this.w) / 1494;
 
+        this.damage = 50;
+
         this.image = new Image();
         this.image.src = "images/phaser.png";
     }
