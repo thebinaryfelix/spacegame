@@ -23,7 +23,6 @@ class Game {
                     this.createEnemy();
                     this.spanEnemy = 0;
                 }
-                this.spaceship.checkPhaserImpact();
             },
             TIME_DELTA
         );
