@@ -6,3 +6,9 @@ body{
 .board-game {
     position: absolute;
   }
+
+  #life-container{
+    position: absolute;
+    z-index: 1000;
+    color: #ffffff;
+  }

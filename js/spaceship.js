@@ -12,11 +12,13 @@ class Spaceship {
 
         this.speed = V_UNITS;
         this.phasers = [];
+
+        this.life = 500;
     }
 
     draw() {
         this.game.ctx.drawImage(this.image, this.x, this.y, SPACESHIP_W, SPACESHIP_H);
-        this.phasers.forEach(function (phaser) {
+        this.phasers.forEach((phaser) => {
             phaser.draw();
         })
     }
@@ -93,6 +95,7 @@ class Spaceship {
         }
 
         this.checkPhaserImpact();
+        this.checkDamageTaken();
 
         this.phasers = this.phasers.filter((phaser) => {
             return phaser.x < this.game.board.width;
@@ -105,6 +108,8 @@ class Spaceship {
 
     shoot() {
         let phaser = new Phaser(this.game);
+        const shootingSound = new Sound("audio/goodShoot.wav");
+        shootingSound.play();
 
         phaser.x = this.x + SPACESHIP_W * 0.55;
         phaser.y = this.y + 30;
@@ -114,16 +119,39 @@ class Spaceship {
 
     checkPhaserImpact() {
         if (this.game.enemies != 0 && this.phasers.length != 0) {
-            for (let i = 0; i < this.phasers.length; i++) {
-                for (let j = 0; j < this.game.enemies.length; j++) {
+            for (let j = 0; j < this.game.enemies.length; j++) {
+                for (let i = 0; i < this.phasers.length; i++) {
                     if (this.phasers[i].x + this.phasers[i].w - 30 >= this.game.enemies[j].x &&
-                        this.phasers[i].x + this.phasers[i].w -30 <= this.game.enemies[j].x + this.game.enemies[j].w &&
+                        this.phasers[i].x + this.phasers[i].w - 30 <= this.game.enemies[j].x + this.game.enemies[j].w &&
                         (this.phasers[i].y >= this.game.enemies[j].y ||
                             this.phasers[i].y + this.phasers[i].h >= this.game.enemies[j].y) &&
                         this.phasers[i].y <= this.game.enemies[j].y + this.game.enemies[j].h
                     ) {
                         this.game.enemies[j].life = this.game.enemies[j].life - this.phasers[i].damage;
                         this.phasers.splice(i, 1);
+                    }
+                }
+            }
+        }
+    }
+
+    checkDamageTaken() {
+        if (this.game.enemies != 0) {
+            for (let i = 0; i < this.game.enemies.length; i++) {
+                if (this.game.enemyPhasers.length != 0) {
+                    for (let j = 0; j < this.game.enemyPhasers.length; j++) {
+                        if (this.game.enemyPhasers[j].x <= this.x + SPACESHIP_W - 30 &&
+                            this.game.enemyPhasers[j].x >= this.x &&
+                            (this.game.enemyPhasers[j].y >= this.y ||
+                                this.game.enemyPhasers[j].y + this.game.enemyPhasers[j].h >= this.y) &&
+                            this.game.enemyPhasers[j].y <= this.y + SPACESHIP_H
+                        ) {
+                            this.life = this.life - this.game.enemyPhasers[j].damage;
+                            this.game.enemyPhasers.splice(j, 1);
+                            if (this.life <= 0) {
+                                this.game.started = false;
+                            }
+                        }
                     }
                 }
             }

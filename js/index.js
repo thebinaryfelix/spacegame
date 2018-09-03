@@ -1,6 +1,6 @@
 let keys = {};
 
-$(function () {
+$(() => {
     loadBoard();
 })
 

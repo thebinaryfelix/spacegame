@@ -8,25 +8,44 @@ class Game {
         this.background = new Background(this);
         this.spaceship = new Spaceship(this);
         this.enemies = [];
+        this.enemyPhasers = [];
+
+        this.started = true;
     }
 
     play() {
         this.spanEnemy = 0;
-        this.interval = setInterval(
-            () => {
-                this.draw();
-                this.move();
-                this.spaceship.setAction(playerInput(PLAYER_CONTROLS));
-
-                this.spanEnemy++;
-                if (this.spanEnemy > 200 && this.enemies.length < ENEMY_QTY) {
-                    this.createEnemy();
-                    this.spanEnemy = 0;
-                }
-                this.checkEnemyLife();
-            },
-            TIME_DELTA
-        );
+        this.enemyShoot = 0;
+        if (this.started == true) {
+            this.interval = setInterval(
+                () => {
+                    
+                    this.draw();
+                    this.move();
+                    this.spaceship.setAction(playerInput(PLAYER_CONTROLS));
+                    
+                    this.spanEnemy++;
+                    if (this.spanEnemy > 200 && this.enemies.length < ENEMY_QTY) {
+                        this.createEnemy();
+                        this.spanEnemy = 0;
+                    }
+                    this.checkEnemyLife();
+                    
+                    this.enemyShoot++;
+                    if (this.enemyShoot > 100 && this.enemies.length != 0) {
+                        for (let i = 0; i < this.enemies.length; i++) {
+                            this.enemies[i].shoot();
+                        }
+                        this.enemyShoot = 0;
+                    }
+                    $("#life").text(this.spaceship.life);
+                    if(this.started == false){
+                        clearInterval(this.interval);
+                    }
+                },
+                TIME_DELTA
+            );
+        }
     }
 
     draw() {
@@ -37,6 +56,11 @@ class Game {
             for (let i = 0; i < this.enemies.length; i++) {
                 this.enemies[i].draw();
             }
+        }
+        if (this.enemyPhasers.length != 0) {
+            this.enemyPhasers.forEach((phaser) => {
+                phaser.draw();
+            })
         }
     }
 
@@ -49,6 +73,15 @@ class Game {
                 this.enemies[i].move();
             }
         }
+
+        this.enemyPhasers = this.enemyPhasers.filter((phaser) => {
+            return phaser.x + phaser.w > 0;
+        })
+
+        this.enemyPhasers.forEach(function (phaser) {
+            phaser.move();
+        })
+        
     }
 
     createEnemy() {
