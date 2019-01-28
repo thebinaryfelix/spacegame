@@ -49,35 +49,47 @@ class Spaceship {
       }
     };
     if (action.movingX == -1) {
+      // Spaceship is moving to the left
       if (action.movingY == -1) {
+        // Spaceship also moving up
         this.directionX = -DIAGONAL_COS;
         this.directionY = -DIAGONAL_COS;
       } else if (action.movingY == 1) {
+        // Spaceship also moving down
         this.directionX = -DIAGONAL_COS;
         this.directionY = DIAGONAL_COS;
       } else {
+        // Speceship only moving left
         this.directionX = -1;
         this.directionY = 0;
       }
     } else if (action.movingX == 1) {
+      // Spaceship is moving to the right
       if (action.movingY == -1) {
+        // Spaceship also moving up
         this.directionX = DIAGONAL_COS;
         this.directionY = -DIAGONAL_COS;
       } else if (action.movingY == 1) {
+        // Spaceship also moving down
         this.directionX = DIAGONAL_COS;
         this.directionY = DIAGONAL_COS;
       } else {
+        // Spaceship only moving right
         this.directionX = 1;
         this.directionY = 0;
       }
     } else {
+      // Spaceship only moving on Y axe
       if (action.movingY == -1) {
+        // Spaceship moving up
         this.directionX = 0;
         this.directionY = -1;
       } else if (action.movingY == 1) {
+        // Spaceship moving down
         this.directionX = 0;
         this.directionY = 1;
       } else {
+        // Spaceship stopped moving
         this.directionX = 0;
         this.directionY = 0;
       }
@@ -97,14 +109,14 @@ class Spaceship {
       return phaser.x < this.game.board.width;
     });
 
-    this.phasers.forEach(function(phaser) {
+    this.phasers.forEach(phaser => {
       phaser.move();
     });
   }
 
   shoot() {
     let phaser = new Phaser(this.game);
-    const shootingSound = new Sound('../../resources/audio/goodShoot.wav');
+    const shootingSound = new Sound('resources/audio/goodShoot.wav');
     shootingSound.play();
 
     phaser.x = this.x + SPACESHIP_W * 0.55;
@@ -115,8 +127,8 @@ class Spaceship {
 
   checkPhaserImpact() {
     if (this.game.enemies != 0 && this.phasers.length != 0) {
-      this.game.enemies.forEach((enemy, j) => {
-        this.phasers.forEach((phaser, i) => {
+      this.game.enemies.forEach(enemy => {
+        this.phasers.forEach((phaser, idx) => {
           const impact = [
             phaser.x + phaser.w - 30 >= enemy.x, // [0] right side projectile impact
             phaser.x + phaser.w - 30 <= enemy.x + enemy.w, // [1] left side projectile impact
@@ -126,7 +138,7 @@ class Spaceship {
           ];
           if (impact[0] && impact[1] && (impact[2] || impact[3]) && impact[4]) {
             enemy.life = enemy.life - phaser.damage;
-            this.phasers.splice(i, 1);
+            this.phasers.splice(idx, 1);
           }
         });
       });
@@ -134,26 +146,24 @@ class Spaceship {
   }
 
   checkDamageTaken() {
-    if (this.game.enemies != 0) {
-      for (let i = 0; i < this.game.enemies.length; i++) {
-        if (this.game.enemyPhasers.length != 0) {
-          for (let j = 0; j < this.game.enemyPhasers.length; j++) {
-            if (
-              this.game.enemyPhasers[j].x <= this.x + SPACESHIP_W - 30 &&
-              this.game.enemyPhasers[j].x >= this.x &&
-              (this.game.enemyPhasers[j].y >= this.y ||
-                this.game.enemyPhasers[j].y + this.game.enemyPhasers[j].h >= this.y) &&
-              this.game.enemyPhasers[j].y <= this.y + SPACESHIP_H
-            ) {
-              this.life = this.life - this.game.enemyPhasers[j].damage;
-              this.game.enemyPhasers.splice(j, 1);
-              if (this.life <= 0) {
-                this.game.started = false;
-              }
-            }
+    if (this.game.enemyPhasers.length !== 0) {
+      this.game.enemyPhasers.forEach((enemyPhaser, idx) => {
+        const impact = [
+          enemyPhaser.x <= this.x + SPACESHIP_W - 30, // [0] left side projectile impact on ship's right side
+          enemyPhaser.x >= this.x, // [1] right side projectile impact on ship's left side
+          enemyPhaser.y >= this.y, // [2] upper side projectile impact on ship's top
+          enemyPhaser.y + enemyPhaser.h >= this.y, // [3] lower side projectile impact on ship's top
+          enemyPhaser.y <= this.y + SPACESHIP_H // [4] upper side projectile impact on ship's bottom
+        ];
+        if (impact[0] && impact[1] && (impact[2] || impact[3]) && impact[4]) {
+          this.life = this.life - enemyPhaser.damage;
+          this.game.enemyPhasers.splice(idx, 1);
+          if (this.life <= 0) {
+            // Spaceship was destroied
+            this.game.started = false;
           }
         }
-      }
+      });
     }
   }
 }
