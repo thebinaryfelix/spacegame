@@ -15,7 +15,7 @@ class Background {
   }
 
   draw() {
-    // Draws two identical background images for rendering in Canvas while they move from right to left
+    // Draws two identical background images for rendering in Canvas while they move from left to right
     this.game.ctx.drawImage(
       this.image,
       this.x,
