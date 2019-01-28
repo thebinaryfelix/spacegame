@@ -4,11 +4,11 @@ body{
 }
 
 .board-game {
-    position: absolute;
-  }
+  position: absolute;
+}
 
-  #life-container{
-    position: absolute;
-    z-index: 1000;
-    color: #ffffff;
-  }
+#life-container{
+  position: absolute;
+  z-index: 1000;
+  color: #ffffff;
+}
